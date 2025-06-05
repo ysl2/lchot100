@@ -48,10 +48,82 @@ class Solution:
 ```
 
 ## 双指针
+
 ### [283. 移动零 (Move Zeroes)](https://leetcode.cn/problems/move-zeroes/description)
+
+```python
+class Solution:
+    def moveZeroes(self, nums: List[int]) -> None:
+        left = 0
+        for right in range(len(nums)):
+            if nums[right] != 0:
+                nums[left], nums[right] = nums[right], nums[left]
+                left += 1
+```
+
 ### [11. 盛最多水的容器 (Container With Most Water)](https://leetcode.cn/problems/container-with-most-water/description)
+
+```python
+class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        left, right = 0, len(height) - 1
+        res = 0
+        while left < right:
+            h = min(height[left], height[right])
+            w = right - left
+            res = max(res, h * w)
+            if height[left] <= height[right]:
+                left += 1
+            else:
+                right -= 1
+        return res
+```
+
 ### [15. 三数之和 (3Sum)](https://leetcode.cn/problems/3sum/description)
+
+```python
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        nums.sort()
+        n = len(nums)
+        res = []
+        for first in range(n - 2):
+            if first > 0 and nums[first - 1] == nums[first]:
+                continue
+            third = n - 1
+            target = - nums[first]
+            for second in range(first + 1, n - 1):
+                if second > first + 1 and nums[second - 1] == nums[second]:
+                    continue
+                while second < third and nums[second] + nums[third] > target:
+                    third -= 1
+                if second == third:
+                    break
+                elif nums[second] + nums[third] == target:
+                    res.append([nums[first], nums[second], nums[third]])
+        return res
+```
+
 ### [42. 接雨水 (Trapping Rain Water)](https://leetcode.cn/problems/trapping-rain-water/description)
+
+```python
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        left, right = 0, len(height) - 1
+        max_l, max_r = 0, 0
+        res = 0
+        while left < right:
+            max_l = max(max_l, height[left])
+            max_r = max(max_r, height[right])
+            if height[left] <= height[right]:
+                res += (max_l - height[left])
+                left += 1
+            else:
+                res += (max_r - height[right])
+                right -= 1
+        return res
+```
+
 ## 滑动窗口
 ### [3. 无重复字符的最长子串 (Longest Substring Without Repeating Characters)](https://leetcode.cn/problems/longest-substring-without-repeating-characters/description)
 ### [438. 找到字符串中所有字母异位词 (Find All Anagrams in a String)](https://leetcode.cn/problems/find-all-anagrams-in-a-string/description)
