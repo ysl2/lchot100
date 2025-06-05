@@ -293,10 +293,85 @@ class Solution:
 ```
 
 ## 矩阵
+
 ### [73. 矩阵置零 (Set Matrix Zeroes)](https://leetcode.cn/problems/set-matrix-zeroes/description)
+
+```python
+class Solution:
+    def setZeroes(self, matrix: List[List[int]]) -> None:
+        row_flag = any(matrix[i][0] == 0 for i in range(len(matrix)))
+        col_flag = any(matrix[0][j] == 0 for j in range(len(matrix[0])))
+
+        for i in range(1, len(matrix)):
+            for j in range(1, len((matrix[i]))):
+                if matrix[i][j] == 0:
+                    matrix[i][0] = matrix[0][j] = 0
+
+        for i in range(1, len(matrix)):
+            for j in range(1, len(matrix[0])):
+                if matrix[i][0] == 0 or matrix[0][j] == 0:
+                    matrix[i][j] = 0
+
+        if row_flag:
+            for i in range(len(matrix)):
+                matrix[i][0] = 0
+        if col_flag:
+            for j in range(len(matrix[0])):
+                matrix[0][j] = 0
+```
+
 ### [54. 螺旋矩阵 (Spiral Matrix)](https://leetcode.cn/problems/spiral-matrix/description)
+
+```python
+DIRS = ((0, 1), (1, 0), (0, -1), (-1, 0))
+
+class Solution:
+    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+        m, n = len(matrix), len(matrix[0])
+        res = []
+        i, j = 0, -1
+        di = 0
+        size = m * n
+        while len(res) < size:
+            dx, dy = DIRS[di]
+            for _ in range(n):
+                i += dx
+                j += dy
+                res.append(matrix[i][j])
+            di = (di + 1) % 4
+            n, m = m - 1, n
+        return res
+```
+
 ### [48. 旋转图像 (Rotate Image)](https://leetcode.cn/problems/rotate-image/description)
+
+```python
+class Solution:
+    def rotate(self, matrix: List[List[int]]) -> None:
+        for i in range(len(matrix)):
+            for j in range(i):
+                matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+
+        for i in range(len(matrix)):
+            matrix[i].reverse()
+```
+
 ### [240. 搜索二维矩阵 II (Search a 2D Matrix II)](https://leetcode.cn/problems/search-a-2d-matrix-ii/description)
+
+```python
+class Solution:
+    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+        i, j = 0, len(matrix[0]) - 1
+        while i <= len(matrix) - 1 and j >= 0:
+            if matrix[i][j] == target:
+                return True
+            elif matrix[i][j] > target:
+                j -= 1
+            elif matrix[i][j] < target:
+                i += 1
+        return False
+```
+
 ## 链表
 ### [160. 相交链表 (Intersection of Two Linked Lists)](https://leetcode.cn/problems/intersection-of-two-linked-lists/description)
 ### [206. 反转链表 (Reverse Linked List)](https://leetcode.cn/problems/reverse-linked-list/description)
