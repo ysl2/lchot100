@@ -110,16 +110,16 @@ class Solution:
 class Solution:
     def trap(self, height: List[int]) -> int:
         left, right = 0, len(height) - 1
-        max_l, max_r = 0, 0
+        ml, mr = 0, 0
         res = 0
         while left < right:
-            max_l = max(max_l, height[left])
-            max_r = max(max_r, height[right])
+            ml = max(ml, height[left])
+            mr = max(mr, height[right])
             if height[left] <= height[right]:
-                res += (max_l - height[left])
+                res += ml - height[left]
                 left += 1
             else:
-                res += (max_r - height[right])
+                res += mr - height[right]
                 right -= 1
         return res
 ```
@@ -164,8 +164,62 @@ class Solution:
 ## 子串
 
 ### [560. 和为 K 的子数组 (Subarray Sum Equals K)](https://leetcode.cn/problems/subarray-sum-equals-k/description)
+
+```python
+class Solution:
+    def subarraySum(self, nums: List[int], k: int) -> int:
+        cnt = defaultdict(int)
+        cnt[0] = 1
+        res = 0
+        pre = 0
+        for num in nums:
+            pre += num
+            res += cnt[pre - k]
+            cnt[pre] += 1
+        return res
+```
+
 ### [239. 滑动窗口最大值 (Sliding Window Maximum)](https://leetcode.cn/problems/sliding-window-maximum/description)
+
+```python
+class Solution:
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        q = deque()
+        res = []
+        for i in range(len(nums)):
+            while q and nums[q[-1]] < nums[i]:
+                q.pop()
+            q.append(i)
+            if i - q[0] + 1 > k:
+                q.popleft()
+            if i >= k - 1:
+                res.append(nums[q[0]])
+        return res
+```
+
 ### [76. 最小覆盖子串 (Minimum Window Substring)](https://leetcode.cn/problems/minimum-window-substring/description)
+
+```python
+class Solution:
+    def minWindow(self, s: str, t: str) -> str:
+        cnt = Counter(t)
+        less = len(cnt)
+        ml, mr = -1, len(s)
+        left = 0
+        for right in range(len(s)):
+            cnt[s[right]] -= 1
+            if cnt[s[right]] == 0:
+                less -= 1
+            while less == 0:
+                if right - left < mr - ml:
+                    ml, mr = left, right
+                if cnt[s[left]] == 0:
+                    less += 1
+                cnt[s[left]] += 1
+                left += 1
+        return s[ml: mr + 1] if ml != -1 else ''
+```
+
 ## 普通数组
 ### [53. 最大子数组和 (Maximum Subarray)](https://leetcode.cn/problems/maximum-subarray/description)
 ### [56. 合并区间 (Merge Intervals)](https://leetcode.cn/problems/merge-intervals/description)
