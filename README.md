@@ -221,11 +221,77 @@ class Solution:
 ```
 
 ## 普通数组
+
 ### [53. 最大子数组和 (Maximum Subarray)](https://leetcode.cn/problems/maximum-subarray/description)
+
+```python
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        res = nums[0]
+        for i in range(1, len(nums)):
+            nums[i] = max(nums[i], nums[i - 1] + nums[i])
+            res = max(res, nums[i])
+        return res
+```
+
 ### [56. 合并区间 (Merge Intervals)](https://leetcode.cn/problems/merge-intervals/description)
+
+```python
+class Solution:
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        intervals.sort()
+        res = []
+        for tmp in intervals:
+            if res and res[-1][1] >= tmp[0]:
+                res[-1][1] = max(res[-1][1], tmp[1])
+            else:
+                res.append(tmp)
+        return res
+```
+
 ### [189. 轮转数组 (Rotate Array)](https://leetcode.cn/problems/rotate-array/description)
+
+```python
+class Solution:
+    def rotate(self, nums: List[int], k: int) -> None:
+        k %= len(nums)
+        nums[:] = nums[::-1]
+        nums[:k] = nums[:k][::-1]
+        nums[k:] = nums[k:][::-1]
+```
+
 ### [238. 除自身以外数组的乘积 (Product of Array Except Self)](https://leetcode.cn/problems/product-of-array-except-self/description)
+
+```python
+class Solution:
+    def productExceptSelf(self, nums: List[int]) -> List[int]:
+        n = len(nums)
+        res = [1] * n
+        for i in range(n - 2, -1, -1):
+            res[i] = res[i + 1] * nums[i + 1]
+        pre = 1
+        for i in range(n):
+            res[i] *= pre
+            pre *= nums[i]
+        return res
+```
+
 ### [41. 缺失的第一个正数 (First Missing Positive)](https://leetcode.cn/problems/first-missing-positive/description)
+
+```python
+class Solution:
+    def firstMissingPositive(self, nums: List[int]) -> int:
+        for i in range(len(nums)):
+            while 0 <= nums[i] - 1 <= len(nums) - 1 and nums[nums[i] - 1] != nums[i]:
+                tmp = nums[i] - 1
+                nums[tmp], nums[i] = nums[i], nums[tmp]
+
+        for i in range(len(nums)):
+            if nums[i] != i + 1:
+                return i + 1
+        return len(nums) + 1
+```
+
 ## 矩阵
 ### [73. 矩阵置零 (Set Matrix Zeroes)](https://leetcode.cn/problems/set-matrix-zeroes/description)
 ### [54. 螺旋矩阵 (Spiral Matrix)](https://leetcode.cn/problems/spiral-matrix/description)
