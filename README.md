@@ -373,20 +373,361 @@ class Solution:
 ```
 
 ## 链表
+
 ### [160. 相交链表 (Intersection of Two Linked Lists)](https://leetcode.cn/problems/intersection-of-two-linked-lists/description)
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> Optional[ListNode]:
+        pA, pB = headA, headB
+        while pA is not pB:
+            pA = pA.next if pA else headB
+            pB = pB.next if pB else headA
+        return pA
+```
+
 ### [206. 反转链表 (Reverse Linked List)](https://leetcode.cn/problems/reverse-linked-list/description)
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+
+class Solution:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        p = dummy = ListNode()
+        while head:
+            tmp = head.next
+            head.next = p.next
+            p.next = head
+            head = tmp
+        return dummy.next
+```
+
 ### [234. 回文链表 (Palindrome Linked List)](https://leetcode.cn/problems/palindrome-linked-list/description)
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+
+class Solution:
+    def isPalindrome(self, head: Optional[ListNode]) -> bool:
+        def find_mid(head):
+            p = dummy = ListNode(next=head)
+            q = head
+            while q and q.next:
+                p = p.next
+                q = q.next.next
+            return p
+
+        def reverse(head):
+            p = dummy = ListNode()
+            while head:
+                tmp = head.next
+                head.next = p.next
+                p.next = head
+                head = tmp
+            return dummy.next
+
+        p = find_mid(head)
+        tmp = p.next
+        p.next = None
+        p = tmp
+        p = reverse(p)
+        while head and p and head.val == p.val:
+            head = head.next
+            p = p.next
+        return not (head and p)
+```
+
 ### [141. 环形链表 (Linked List Cycle)](https://leetcode.cn/problems/linked-list-cycle/description)
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def hasCycle(self, head: Optional[ListNode]) -> bool:
+        p = q = head
+        while q and q.next:
+            p = p.next
+            q = q.next.next
+            if p is q:
+                return True
+        return False
+```
+
 ### [142. 环形链表 II (Linked List Cycle II)](https://leetcode.cn/problems/linked-list-cycle-ii/description)
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def detectCycle(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        p = q = head
+        while q and q.next:
+            p = p.next
+            q = q.next.next
+            if p is q:
+                break
+        if not (q and q.next):
+            return
+        p = head
+        while p is not q:
+            p = p.next
+            q = q.next
+        return p
+```
+
 ### [21. 合并两个有序链表 (Merge Two Sorted Lists)](https://leetcode.cn/problems/merge-two-sorted-lists/description)
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+
+class Solution:
+    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
+        p = dummy = ListNode()
+        while list1 and list2:
+            if list1.val < list2.val:
+                p.next = list1
+                p = p.next
+                list1 = list1.next
+            else:
+                p.next = list2
+                p = p.next
+                list2 = list2.next
+        p.next = list1 or list2
+        return dummy.next
+```
+
 ### [2. 两数相加 (Add Two Numbers)](https://leetcode.cn/problems/add-two-numbers/description)
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        p = dummy = ListNode()
+        carry = 0
+        while l1 or l2 or carry:
+            if l1:
+                carry += l1.val
+                l1 = l1.next
+            if l2:
+                carry += l2.val
+                l2 = l2.next
+            p.next = ListNode(val=carry % 10)
+            p = p.next
+            carry //= 10
+        return dummy.next
+```
+
 ### [19. 删除链表的倒数第 N 个结点 (Remove Nth Node From End of List)](https://leetcode.cn/problems/remove-nth-node-from-end-of-list/description)
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+
+class Solution:
+    def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
+        p = dummy = ListNode(next=head)
+        q = head
+        for _ in range(n):
+            q = q.next
+        while q:
+            p = p.next
+            q = q.next
+        p.next = p.next.next
+        return dummy.next
+```
+
 ### [24. 两两交换链表中的节点 (Swap Nodes in Pairs)](https://leetcode.cn/problems/swap-nodes-in-pairs/description)
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+
+class Solution:
+    def swapPairs(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        node0 = dummy = ListNode(next=head)
+        node1 = head
+        while node1 and node1.next:
+            node2 = node1.next
+            node3 = node2.next
+
+            node0.next = node2
+            node2.next = node1
+            node1.next = node3
+
+            node0 = node1
+            node1 = node3
+        return dummy.next
+```
+
 ### [25. K 个一组翻转链表 (Reverse Nodes in k-Group)](https://leetcode.cn/problems/reverse-nodes-in-k-group/description)
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+
+class Solution:
+    def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
+        p = head
+        for _ in range(k):
+            if not p:
+                return head
+            p = p.next
+        p, q = None, head
+        for _ in range(k):
+            tmp = q.next
+            q.next = p
+            p = q
+            q = tmp
+        head.next = self.reverseKGroup(q, k)
+        return p
+```
+
 ### [138. 随机链表的复制 (Copy List with Random Pointer)](https://leetcode.cn/problems/copy-list-with-random-pointer/description)
+
+```python
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
+        self.val = int(x)
+        self.next = next
+        self.random = random
+"""
+
+class Solution:
+    def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
+        if not head:
+            return
+        mp = {}
+        p = head
+        while p:
+            mp[p] = ListNode(p.val)
+            p = p.next
+        for k in mp:
+            mp[k].next = mp.get(k.next)
+            mp[k].random = mp.get(k.random)
+        return mp[head]
+```
+
 ### [148. 排序链表 (Sort List)](https://leetcode.cn/problems/sort-list/description)
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+
+class Solution:
+    def sortList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if not (head and head.next):
+            return head
+        p, q = head, head.next
+        while q and q.next:
+            p = p.next
+            q = q.next.next
+        tmp = p.next
+        p.next = None
+        p = tmp
+        head, p = self.sortList(head), self.sortList(p)
+        r = dummy = ListNode()
+        while head and p:
+            if head.val < p.val:
+                r.next = ListNode(head.val)
+                r = r.next
+                head = head.next
+            else:
+                r.next = ListNode(p.val)
+                r = r.next
+                p = p.next
+        r.next = head if head else p
+        return dummy.next
+```
+
 ### [23. 合并 K 个升序链表 (Merge k Sorted Lists)](https://leetcode.cn/problems/merge-k-sorted-lists/description)
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+
+ListNode.__lt__ = lambda x, y: x.val < y.val
+class Solution:
+    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+        lists = [ l for l in lists if l ]
+        heapify(lists)
+        p = dummy = ListNode()
+        while lists:
+            node = heappop(lists)
+            p.next = node
+            p = p.next
+            if node.next:
+                heappush(lists, node.next)
+        return dummy.next
+```
+
 ### [146. LRU 缓存 (LRU Cache)](https://leetcode.cn/problems/lru-cache/description)
+
+```python
+class LRUCache(OrderedDict):
+
+    def __init__(self, capacity: int):
+        self.capacity = capacity
+
+    def get(self, key: int) -> int:
+        if key not in self:
+            return -1
+        self.move_to_end(key)
+        return self[key]
+
+    def put(self, key: int, value: int) -> None:
+        self[key] = value
+        self.move_to_end(key)
+        if len(self) > self.capacity:
+            self.popitem(last=False)
+```
+
 ## 二叉树
 ### [94. 二叉树的中序遍历 (Binary Tree Inorder Traversal)](https://leetcode.cn/problems/binary-tree-inorder-traversal/description)
 ### [104. 二叉树的最大深度 (Maximum Depth of Binary Tree)](https://leetcode.cn/problems/maximum-depth-of-binary-tree/description)
