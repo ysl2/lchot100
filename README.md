@@ -125,9 +125,44 @@ class Solution:
 ```
 
 ## 滑动窗口
+
 ### [3. 无重复字符的最长子串 (Longest Substring Without Repeating Characters)](https://leetcode.cn/problems/longest-substring-without-repeating-characters/description)
+
+```python
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        window = set()
+        res = 0
+        left = 0
+        for right in range(len(s)):
+            while s[right] in window:
+                window.remove(s[left])
+                left += 1
+            window.add(s[right])
+            res = max(res, right - left + 1)
+        return res
+```
+
 ### [438. 找到字符串中所有字母异位词 (Find All Anagrams in a String)](https://leetcode.cn/problems/find-all-anagrams-in-a-string/description)
+
+```python
+class Solution:
+    def findAnagrams(self, s: str, p: str) -> List[int]:
+        window = Counter(p)
+        left = 0
+        res = []
+        for right in range(len(s)):
+            window[s[right]] -= 1
+            while window[s[right]] < 0:
+                window[s[left]] += 1
+                left += 1
+            if right - left + 1 == len(p):
+                res.append(left)
+        return res
+```
+
 ## 子串
+
 ### [560. 和为 K 的子数组 (Subarray Sum Equals K)](https://leetcode.cn/problems/subarray-sum-equals-k/description)
 ### [239. 滑动窗口最大值 (Sliding Window Maximum)](https://leetcode.cn/problems/sliding-window-maximum/description)
 ### [76. 最小覆盖子串 (Minimum Window Substring)](https://leetcode.cn/problems/minimum-window-substring/description)
