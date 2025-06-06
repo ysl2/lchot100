@@ -1569,11 +1569,92 @@ class Solution:
 ```
 
 ## 栈
+
 ### [20. 有效的括号 (Valid Parentheses)](https://leetcode.cn/problems/valid-parentheses/description)
+
+```python
+class Solution:
+    def isValid(self, s: str) -> bool:
+        st = []
+        for c in s:
+            if (
+                st and c == ')' and st[-1] == '('
+                or st and c == ']' and st[-1] == '['
+                or st and c == '}' and st[-1] == '{'
+            ):
+                st.pop()
+            else:
+                st.append(c)
+        return not st
+```
+
 ### [155. 最小栈 (Min Stack)](https://leetcode.cn/problems/min-stack/description)
+
+```python
+class MinStack(list):
+
+    def push(self, val: int) -> None:
+        self.append([val, min(self[-1][1], val) if self else val])
+
+    def top(self) -> int:
+        return self[-1][0]
+
+    def getMin(self) -> int:
+        return self[-1][1]
+```
+
 ### [394. 字符串解码 (Decode String)](https://leetcode.cn/problems/decode-string/description)
+
+```python
+class Solution:
+    def decodeString(self, s: str) -> str:
+        st, res, multi = [], '', 0
+        for c in s:
+            if '0' <= c <= '9':
+                multi = multi * 10 + int(c)
+            elif c == '[':
+                st.append([multi, res])
+                multi, res = 0, ''
+            elif c == ']':
+                item = st.pop()
+                res = item[1] + item[0] * res
+            else:
+                res += c
+        return res
+```
+
 ### [739. 每日温度 (Daily Temperatures)](https://leetcode.cn/problems/daily-temperatures/description)
+
+```python
+class Solution:
+    def dailyTemperatures(self, ts: List[int]) -> List[int]:
+        st = []
+        res = [0] * len(ts)
+        for i in range(len(ts)):
+            while st and ts[st[-1]] < ts[i]:
+                j = st.pop()
+                res[j] = i - j
+            st.append(i)
+        return res
+```
+
 ### [84. 柱状图中最大的矩形 (Largest Rectangle in Histogram)](https://leetcode.cn/problems/largest-rectangle-in-histogram/description)
+
+```python
+class Solution:
+    def largestRectangleArea(self, heights: List[int]) -> int:
+        st = []
+        heights = [0] + heights + [0]
+        res = 0
+        for i in range(len(heights)):
+            while st and heights[st[-1]] > heights[i]:
+                h = heights[st.pop()]
+                w = i - st[-1] - 1
+                res = max(res, h * w)
+            st.append(i)
+        return res
+```
+
 ## 堆
 ### [215. 数组中的第K个最大元素 (Kth Largest Element in an Array)](https://leetcode.cn/problems/kth-largest-element-in-an-array/description)
 ### [347. 前 K 个高频元素 (Top K Frequent Elements)](https://leetcode.cn/problems/top-k-frequent-elements/description)
