@@ -1908,11 +1908,88 @@ class Solution:
 ```
 
 ## 多维动态规划
+
 ### [62. 不同路径 (Unique Paths)](https://leetcode.cn/problems/unique-paths/description)
+
+```python
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        @cache
+        def dfs(i, j):
+            if i == 0 and j == 0:
+                return 1
+            if i < 0 or j < 0:
+                return 0
+            return dfs(i - 1, j) + dfs(i, j - 1)
+        return dfs(m - 1, n - 1)
+```
+
 ### [64. 最小路径和 (Minimum Path Sum)](https://leetcode.cn/problems/minimum-path-sum/description)
+
+```python
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        @cache
+        def dfs(i, j):
+            if i == 0 and j == 0:
+                return grid[0][0]
+            if i == 0:
+                return dfs(i, j - 1) + grid[i][j]
+            if j == 0:
+                return dfs(i - 1, j) + grid[i][j]
+            return min(dfs(i - 1, j), dfs(i, j - 1)) + grid[i][j]
+        return dfs(len(grid) - 1, len(grid[0]) - 1)
+```
+
 ### [5. 最长回文子串 (Longest Palindromic Substring)](https://leetcode.cn/problems/longest-palindromic-substring/description)
+
+```python
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        s = '#' + '#'.join(list(s)) + '#'
+        ml, mr = len(s), -1
+        for i in range(len(s)):
+            left, right = i, i
+            while left >= 0 and right <= len(s) - 1 and s[left] == s[right]:
+                left -= 1
+                right += 1
+            if right - left > mr - ml:
+                ml, mr = left + 1, right - 1
+        return s[ml : mr + 1].replace('#', '') if mr != -1 else ''
+```
+
 ### [1143. 最长公共子序列 (Longest Common Subsequence)](https://leetcode.cn/problems/longest-common-subsequence/description)
+
+```python
+class Solution:
+    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+        @cache
+        def dfs(i, j):
+            if i < 0 or j < 0:
+                return 0
+            if text1[i] == text2[j]:
+                return dfs(i - 1, j - 1) + 1
+            return max(dfs(i - 1, j), dfs(i, j - 1))
+        return dfs(len(text1) - 1, len(text2) - 1)
+```
+
 ### [72. 编辑距离 (Edit Distance)](https://leetcode.cn/problems/edit-distance/description)
+
+```python
+class Solution:
+    def minDistance(self, word1: str, word2: str) -> int:
+        @cache
+        def dfs(i, j):
+            if i < 0:
+                return j + 1
+            if j < 0:
+                return i + 1
+            if word1[i] == word2[j]:
+                return dfs(i - 1, j - 1)
+            return min(dfs(i - 1, j), dfs(i, j - 1), dfs(i - 1, j - 1)) + 1
+        return dfs(len(word1) - 1, len(word2) - 1)
+```
+
 ## 技巧
 ### [136. 只出现一次的数字 (Single Number)](https://leetcode.cn/problems/single-number/description)
 ### [169. 多数元素 (Majority Element)](https://leetcode.cn/problems/majority-element/description)
