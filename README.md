@@ -1697,10 +1697,66 @@ class MedianFinder:
 ```
 
 ## 贪心算法
+
 ### [121. 买卖股票的最佳时机 (Best Time to Buy and Sell Stock)](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/description)
+
+```python
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        min_price = inf
+        max_profit = -inf
+        for price in prices:
+            min_price = min(min_price, price)
+            max_profit = max(max_profit, price - min_price)
+        return max_profit
+```
+
 ### [55. 跳跃游戏 (Jump Game)](https://leetcode.cn/problems/jump-game/description)
+
+```python
+class Solution:
+    def canJump(self, nums: List[int]) -> bool:
+        mx = 0
+        for i in range(len(nums)):
+            if i > mx:
+                return False
+            mx = max(mx, i + nums[i])
+            if mx >= len(nums) - 1:
+                return True
+        return False
+```
+
 ### [45. 跳跃游戏 II (Jump Game II)](https://leetcode.cn/problems/jump-game-ii/description)
+
+```python
+class Solution:
+    def jump(self, nums: List[int]) -> int:
+        res = mx = tmp = 0
+        n = len(nums)
+        for i in range(n - 1):
+            mx = max(mx, i + nums[i])
+            if i == tmp:
+                tmp = mx
+                res += 1
+        return res
+```
+
 ### [763. 划分字母区间 (Partition Labels)](https://leetcode.cn/problems/partition-labels/description)
+
+```python
+class Solution:
+    def partitionLabels(self, s: str) -> List[int]:
+        last_pos = {c: i for i, c in enumerate(s)}
+        start, end = 0, 0
+        res = []
+        for i, c in enumerate(s):
+            end = max(end, last_pos[c])
+            if i == end:
+                res.append(end - start + 1)
+                start = end + 1
+        return res
+```
+
 ## 动态规划
 ### [70. 爬楼梯 (Climbing Stairs)](https://leetcode.cn/problems/climbing-stairs/description)
 ### [118. 杨辉三角 (Pascal's Triangle)](https://leetcode.cn/problems/pascals-triangle/description)
