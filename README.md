@@ -383,6 +383,7 @@ class Solution:
 #         self.val = x
 #         self.next = None
 
+
 class Solution:
     def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> Optional[ListNode]:
         pA, pB = headA, headB
@@ -400,6 +401,7 @@ class Solution:
 #     def __init__(self, val=0, next=None):
 #         self.val = val
 #         self.next = next
+
 
 class Solution:
     def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
@@ -420,6 +422,7 @@ class Solution:
 #     def __init__(self, val=0, next=None):
 #         self.val = val
 #         self.next = next
+
 
 class Solution:
     def isPalindrome(self, head: Optional[ListNode]) -> bool:
@@ -460,6 +463,7 @@ class Solution:
 #         self.val = x
 #         self.next = None
 
+
 class Solution:
     def hasCycle(self, head: Optional[ListNode]) -> bool:
         p = q = head
@@ -479,6 +483,7 @@ class Solution:
 #     def __init__(self, x):
 #         self.val = x
 #         self.next = None
+
 
 class Solution:
     def detectCycle(self, head: Optional[ListNode]) -> Optional[ListNode]:
@@ -506,6 +511,7 @@ class Solution:
 #         self.val = val
 #         self.next = next
 
+
 class Solution:
     def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
         p = dummy = ListNode()
@@ -530,6 +536,8 @@ class Solution:
 #     def __init__(self, val=0, next=None):
 #         self.val = val
 #         self.next = next
+
+
 class Solution:
     def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
         p = dummy = ListNode()
@@ -556,6 +564,7 @@ class Solution:
 #         self.val = val
 #         self.next = next
 
+
 class Solution:
     def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
         p = dummy = ListNode(next=head)
@@ -577,6 +586,7 @@ class Solution:
 #     def __init__(self, val=0, next=None):
 #         self.val = val
 #         self.next = next
+
 
 class Solution:
     def swapPairs(self, head: Optional[ListNode]) -> Optional[ListNode]:
@@ -603,6 +613,7 @@ class Solution:
 #     def __init__(self, val=0, next=None):
 #         self.val = val
 #         self.next = next
+
 
 class Solution:
     def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
@@ -633,6 +644,7 @@ class Node:
         self.random = random
 """
 
+
 class Solution:
     def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
         if not head:
@@ -656,6 +668,7 @@ class Solution:
 #     def __init__(self, val=0, next=None):
 #         self.val = val
 #         self.next = next
+
 
 class Solution:
     def sortList(self, head: Optional[ListNode]) -> Optional[ListNode]:
@@ -691,6 +704,7 @@ class Solution:
 #     def __init__(self, val=0, next=None):
 #         self.val = val
 #         self.next = next
+
 
 ListNode.__lt__ = lambda x, y: x.val < y.val
 class Solution:
@@ -729,21 +743,405 @@ class LRUCache(OrderedDict):
 ```
 
 ## 二叉树
+
 ### [94. 二叉树的中序遍历 (Binary Tree Inorder Traversal)](https://leetcode.cn/problems/binary-tree-inorder-traversal/description)
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+
+class Solution:
+    def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        if not root:
+            return []
+        return self.inorderTraversal(root.left) + [root.val] + self.inorderTraversal(root.right)
+
+
+class Solution:
+    def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        res = []
+        stack = [root]
+        while stack:
+            x = stack.pop()
+            if isinstance(x, int):
+                res.append(x)
+            elif isinstance(x, TreeNode):
+                stack.extend([x.right, x.val, x.left])
+        return res
+```
+
 ### [104. 二叉树的最大深度 (Maximum Depth of Binary Tree)](https://leetcode.cn/problems/maximum-depth-of-binary-tree/description)
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+
+class Solution:
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        return max(self.maxDepth(root.left), self.maxDepth(root.right)) + 1
+
+
+class Solution:
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        q = deque([root])
+        max_depth = 0
+        while q:
+            for _ in range(len(q)):
+                node = q.popleft()
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
+            max_depth += 1
+        return max_depth
+```
+
 ### [226. 翻转二叉树 (Invert Binary Tree)](https://leetcode.cn/problems/invert-binary-tree/description)
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+
+class Solution:
+    def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        if not root:
+            return
+        root.left, root.right = self.invertTree(root.right), self.invertTree(root.left)
+        return root
+```
+
 ### [101. 对称二叉树 (Symmetric Tree)](https://leetcode.cn/problems/symmetric-tree/description)
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+
+class Solution:
+    def isSymmetric(self, root: Optional[TreeNode]) -> bool:
+        def dfs(p, q):
+            if not (p and q):
+                return p is q
+            return p.val == q.val and dfs(p.left, q.right) and dfs(p.right, q.left)
+        return dfs(root, root)
+```
+
 ### [543. 二叉树的直径 (Diameter of Binary Tree)](https://leetcode.cn/problems/diameter-of-binary-tree/description)
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+
+class Solution:
+    def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+        self.res = 0
+        def dfs(root):
+            if not root:
+                return 0
+            l, r = dfs(root.left), dfs(root.right)
+            self.res = max(self.res, l + r)
+            return max(l, r) + 1
+        dfs(root)
+        return self.res
+```
+
 ### [102. 二叉树的层序遍历 (Binary Tree Level Order Traversal)](https://leetcode.cn/problems/binary-tree-level-order-traversal/description)
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+
+class Solution:
+    def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        if not root:
+            return []
+        q = deque([root])
+        res = []
+        while q:
+            tmp = []
+            for _ in range(len(q)):
+                node = q.popleft()
+                tmp.append(node.val)
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
+            res.append(tmp)
+        return res
+```
+
 ### [108. 将有序数组转换为二叉搜索树 (Convert Sorted Array to Binary Search Tree)](https://leetcode.cn/problems/convert-sorted-array-to-binary-search-tree/description)
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+
+class Solution:
+    def sortedArrayToBST(self, nums: List[int]) -> Optional[TreeNode]:
+        if not nums:
+            return
+        m = len(nums) // 2
+        return TreeNode(
+            val=nums[m],
+            left=self.sortedArrayToBST(nums[:m]),
+            right=self.sortedArrayToBST(nums[m + 1:])
+        )
+```
+
 ### [98. 验证二叉搜索树 (Validate Binary Search Tree)](https://leetcode.cn/problems/validate-binary-search-tree/description)
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+
+class Solution:
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        def dfs(root, lower, upper):
+            if not root:
+                return True
+            if not (lower < root.val < upper):
+                return False
+            return dfs(root.left, lower, root.val) and dfs(root.right, root.val, upper)
+        return dfs(root, -inf, inf)
+```
+
 ### [230. 二叉搜索树中第 K 小的元素 (Kth Smallest Element in a BST)](https://leetcode.cn/problems/kth-smallest-element-in-a-bst/description)
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+
+class Solution:
+    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+        self.k = k
+        self.res = None
+        def dfs(root):
+            if not root:
+                return
+            dfs(root.left)
+
+            self.k -= 1
+            if self.k == 0:
+                self.res = root.val
+
+            dfs(root.right)
+        dfs(root)
+        return self.res
+```
+
 ### [199. 二叉树的右视图 (Binary Tree Right Side View)](https://leetcode.cn/problems/binary-tree-right-side-view/description)
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+
+class Solution:
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        if not root:
+            return []
+        res = []
+        q = deque([root])
+        while q:
+            n = len(q)
+            for i in range(n):
+                node = q.popleft()
+                if i == n - 1:
+                    res.append(node.val)
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
+        return res
+```
+
 ### [114. 二叉树展开为链表 (Flatten Binary Tree to Linked List)](https://leetcode.cn/problems/flatten-binary-tree-to-linked-list/description)
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+
+class Solution:
+    def flatten(self, root: Optional[TreeNode]) -> None:
+        """
+        Do not return anything, modify root in-place instead.
+        """
+        if not root:
+            return
+        self.flatten(root.left)
+        self.flatten(root.right)
+
+        tmp = root.right
+        root.right = root.left
+        root.left = None
+        p = root
+        while p and p.right:
+            p = p.right
+        p.right = tmp
+```
+
 ### [105. 从前序与中序遍历序列构造二叉树 (Construct Binary Tree from Preorder and Inorder Traversal)](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description)
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+
+class Solution:
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+        mp = {val: i for i, val in enumerate(inorder)}
+        def dfs(root, left, right):
+            if left > right:
+                return
+            i = mp[preorder[root]]
+            return TreeNode(
+                val=preorder[root],
+                left=dfs(root + 1, left, i - 1),
+                right=dfs(i - left + 1 + root, i + 1, right)
+            )
+        return dfs(0, 0, len(inorder) - 1)
+```
+
 ### [437. 路径总和 III (Path Sum III)](https://leetcode.cn/problems/path-sum-iii/description)
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+
+class Solution:
+    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> int:
+        cnt = defaultdict(int)
+        cnt[0] = 1
+        self.pre = 0
+        self.res = 0
+
+        def dfs(root):
+            if not root:
+                return
+
+            self.pre += root.val
+            self.res += cnt[self.pre - targetSum]
+            cnt[self.pre] += 1
+
+            dfs(root.left)
+            dfs(root.right)
+
+            cnt[self.pre] -= 1
+            self.pre -= root.val
+        dfs(root)
+        return self.res
+```
+
 ### [236. 二叉树的最近公共祖先 (Lowest Common Ancestor of a Binary Tree)](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/description)
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        if root in (None, p, q):
+            return root
+        left = self.lowestCommonAncestor(root.left, p, q)
+        right = self.lowestCommonAncestor(root.right, p, q)
+        if left and right:
+            return root
+        return left or right
+```
+
 ### [124. 二叉树中的最大路径和 (Binary Tree Maximum Path Sum)](https://leetcode.cn/problems/binary-tree-maximum-path-sum/description)
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+
+class Solution:
+    def maxPathSum(self, root: Optional[TreeNode]) -> int:
+        self.res = -inf
+        def dfs(root):
+            if not root:
+                return 0
+            l, r = dfs(root.left), dfs(root.right)
+            self.res = max(self.res, l + r + root.val)
+            return max(max(l, r) + root.val, 0)
+        dfs(root)
+        return self.res
+```
+
 ## 图论
 ### [200. 岛屿数量 (Number of Islands)](https://leetcode.cn/problems/number-of-islands/description)
 ### [994. 腐烂的橘子 (Rotting Oranges)](https://leetcode.cn/problems/rotting-oranges/description)
