@@ -709,7 +709,7 @@ class Solution:
 ListNode.__lt__ = lambda x, y: x.val < y.val
 class Solution:
     def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
-        lists = [ l for l in lists if l ]
+        lists = [l for l in lists if l]
         heapify(lists)
         p = dummy = ListNode()
         while lists:
