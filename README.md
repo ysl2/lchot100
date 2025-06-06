@@ -1991,8 +1991,84 @@ class Solution:
 ```
 
 ## 技巧
+
 ### [136. 只出现一次的数字 (Single Number)](https://leetcode.cn/problems/single-number/description)
+
+```python
+class Solution:
+    def singleNumber(self, nums: List[int]) -> int:
+        x = 0
+        for num in nums:
+            x ^= num
+        return x
+```
+
 ### [169. 多数元素 (Majority Element)](https://leetcode.cn/problems/majority-element/description)
+
+```python
+class Solution:
+    def majorityElement(self, nums: List[int]) -> int:
+        someone = 0
+        tickets = 0
+        for num in nums:
+            if not tickets:
+                someone = num
+            if num == someone:
+                tickets += 1
+            else:
+                tickets -= 1
+        return someone
+```
+
 ### [75. 颜色分类 (Sort Colors)](https://leetcode.cn/problems/sort-colors/description)
+
+```python
+class Solution:
+    def sortColors(self, nums: List[int]) -> None:
+        red, white, blue = 0, 0, len(nums) - 1
+        while white <= blue:
+            if nums[white] == 0:
+                nums[red], nums[white] = nums[white], nums[red]
+                red += 1
+                white += 1
+            elif nums[white] == 1:
+                white += 1
+            elif nums[white] == 2:
+                nums[white], nums[blue] = nums[blue], nums[white]
+                blue -= 1
+```
+
 ### [31. 下一个排列 (Next Permutation)](https://leetcode.cn/problems/next-permutation/description)
+
+```python
+class Solution:
+    def nextPermutation(self, nums: List[int]) -> None:
+        n = len(nums)
+        i = n - 2
+        while i >= 0 and nums[i] >= nums[i + 1]:
+            i -= 1
+        if i >= 0:
+            j = n - 1
+            while j >= 0 and nums[j] <= nums[i]:
+                j -= 1
+            nums[i], nums[j] = nums[j], nums[i]
+        nums[i + 1:] = reversed(nums[i + 1:])
+```
+
 ### [287. 寻找重复数 (Find the Duplicate Number)](https://leetcode.cn/problems/find-the-duplicate-number/description)
+
+```python
+class Solution:
+    def findDuplicate(self, nums: List[int]) -> int:
+        p = q = nums[0]
+        while q and nums[q]:
+            p = nums[p]
+            q = nums[nums[q]]
+            if p == q:
+                break
+        p = nums[0]
+        while p != q:
+            p = nums[p]
+            q = nums[q]
+        return p
+```
