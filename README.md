@@ -149,8 +149,8 @@ class Solution:
 class Solution:
     def findAnagrams(self, s: str, p: str) -> List[int]:
         window = Counter(p)
-        left = 0
         res = []
+        left = 0
         for right in range(len(s)):
             window[s[right]] -= 1
             while window[s[right]] < 0:
