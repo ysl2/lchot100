@@ -1656,9 +1656,46 @@ class Solution:
 ```
 
 ## 堆
+
 ### [215. 数组中的第K个最大元素 (Kth Largest Element in an Array)](https://leetcode.cn/problems/kth-largest-element-in-an-array/description)
+
+```python
+class Solution:
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        h = []
+        for num in nums:
+            heappush(h, num)
+            if len(h) > k:
+                heappop(h)
+        return h[0]
+```
+
 ### [347. 前 K 个高频元素 (Top K Frequent Elements)](https://leetcode.cn/problems/top-k-frequent-elements/description)
+
+```python
+class Solution:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        return [y[0] for y in sorted(Counter(nums).items(), key=lambda x: -x[1])[:k]]
+```
+
 ### [295. 数据流的中位数 (Find Median from Data Stream)](https://leetcode.cn/problems/find-median-from-data-stream/description)
+
+```python
+class MedianFinder:
+
+    def __init__(self):
+        self.a, self.b = [], []
+
+    def addNum(self, num: int) -> None:
+        heappush(self.a, -num)
+        heappush(self.b, -heappop(self.a))
+        if len(self.b) > len(self.a):
+            heappush(self.a, -heappop(self.b))
+
+    def findMedian(self) -> float:
+        return (-self.a[0] + self.b[0]) / 2 if (len(self.a) + len(self.b)) % 2 == 0 else -self.a[0]
+```
+
 ## 贪心算法
 ### [121. 买卖股票的最佳时机 (Best Time to Buy and Sell Stock)](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/description)
 ### [55. 跳跃游戏 (Jump Game)](https://leetcode.cn/problems/jump-game/description)
