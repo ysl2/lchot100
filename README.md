@@ -1143,10 +1143,119 @@ class Solution:
 ```
 
 ## 图论
+
 ### [200. 岛屿数量 (Number of Islands)](https://leetcode.cn/problems/number-of-islands/description)
+
+```python
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        def dfs(i, j):
+            if not (
+                0 <= i <= len(grid) - 1
+                and 0 <= j <= len(grid[0]) - 1
+            ) or grid[i][j] != '1':
+                return
+            grid[i][j] = '2'
+            dfs(i - 1, j)
+            dfs(i + 1, j)
+            dfs(i, j - 1)
+            dfs(i, j + 1)
+
+        res = 0
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j] == '1':
+                    res += 1
+                    dfs(i, j)
+        return res
+```
+
 ### [994. 腐烂的橘子 (Rotting Oranges)](https://leetcode.cn/problems/rotting-oranges/description)
+
+```python
+class Solution:
+    def orangesRotting(self, grid: List[List[int]]) -> int:
+        q = deque()
+        fresh = 0
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j] == 1:
+                    fresh += 1
+                elif grid[i][j] == 2:
+                    q.append((i, j))
+
+        rounder = 0
+        while fresh and q:
+            rounder += 1
+            for _ in range(len(q)):
+                i, j = q.popleft()
+                for x, y in ((i - 1, j), (i + 1, j), (i, j - 1), (i, j + 1)):
+                    if (
+                        0 <= x <= len(grid) - 1
+                        and 0 <= y <= len(grid[0]) - 1
+                        and grid[x][y] == 1
+                    ):
+                        fresh -= 1
+                        grid[x][y] = 2
+                        q.append((x, y))
+        return rounder if not fresh else -1
+```
+
 ### [207. 课程表 (Course Schedule)](https://leetcode.cn/problems/course-schedule/description)
+
+```python
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        indegs = [0] * numCourses
+        adjs = defaultdict(list)
+        for a, b in prerequisites:
+            indegs[a] += 1
+            adjs[b].append(a)
+
+        q = deque()
+        for i in range(len(indegs)):
+            if indegs[i] == 0:
+                q.append(i)
+
+        while q:
+            cur = q.popleft()
+            numCourses -= 1
+            for nxt in adjs[cur]:
+                indegs[nxt] -= 1
+                if indegs[nxt] == 0:
+                    q.append(nxt)
+        return numCourses == 0
+```
+
 ### [208. 实现 Trie (前缀树) (Implement Trie (Prefix Tree))](https://leetcode.cn/problems/implement-trie-prefix-tree/description)
+
+```python
+class Trie(dict):
+
+    def insert(self, word: str) -> None:
+        for c in word:
+            if c not in self:
+                self[c] = Trie()
+            self = self[c]
+        self['$'] = Trie()
+
+    def search(self, word: str) -> bool:
+        for c in word:
+            if c in self:
+                self = self[c]
+            else:
+                return False
+        return '$' in self
+
+    def startsWith(self, prefix: str) -> bool:
+        for c in prefix:
+            if c in self:
+                self = self[c]
+            else:
+                return False
+        return True
+```
+
 ## 回溯
 ### [46. 全排列 (Permutations)](https://leetcode.cn/problems/permutations/description)
 ### [78. 子集 (Subsets)](https://leetcode.cn/problems/subsets/description)
