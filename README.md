@@ -1758,16 +1758,155 @@ class Solution:
 ```
 
 ## 动态规划
+
 ### [70. 爬楼梯 (Climbing Stairs)](https://leetcode.cn/problems/climbing-stairs/description)
+
+```python
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        @cache
+        def dfs(i):
+            if i <= 1:
+                return 1
+            return dfs(i - 1) + dfs(i - 2)
+        return dfs(n)
+```
+
 ### [118. 杨辉三角 (Pascal's Triangle)](https://leetcode.cn/problems/pascals-triangle/description)
+
+```python
+class Solution:
+    def generate(self, numRows: int) -> List[List[int]]:
+        res = [[1] * (i + 1) for i in range(numRows)]
+        for i in range(1, numRows):
+            for j in range(1, i):
+                res[i][j] = res[i - 1][j - 1] + res[i - 1][j]
+        return res
+```
+
 ### [198. 打家劫舍 (House Robber)](https://leetcode.cn/problems/house-robber/description)
+
+```python
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        @cache
+        def dfs(i):
+            if i < 0:
+                return 0
+            return max(dfs(i - 1), dfs(i - 2) + nums[i])
+        return dfs(len(nums) - 1)
+```
+
 ### [279. 完全平方数 (Perfect Squares)](https://leetcode.cn/problems/perfect-squares/description)
+
+```python
+@cache
+def dfs(i, j):
+    if i == 0:
+        return 0 if j == 0 else inf
+    if j < i * i:
+        return dfs(i - 1, j)
+    return min(dfs(i - 1, j), dfs(i, j - i * i) + 1)
+
+class Solution:
+    def numSquares(self, n: int) -> int:
+        return dfs(isqrt(n), n)
+```
+
 ### [322. 零钱兑换 (Coin Change)](https://leetcode.cn/problems/coin-change/description)
+
+```python
+class Solution:
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        @cache
+        def dfs(i, j):
+            if i < 0:
+                return 0 if j == 0 else inf
+            if j < coins[i]:
+                return dfs(i - 1, j)
+            return min(dfs(i - 1, j), dfs(i, j - coins[i]) + 1)
+        res = dfs(len(coins) - 1, amount)
+        return res if res < inf else -1
+```
+
 ### [139. 单词拆分 (Word Break)](https://leetcode.cn/problems/word-break/description)
+
+```python
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        @cache
+        def dfs(s):
+            if not s:
+                return True
+            for i in range(len(s)):
+                if s[: i + 1] in wordDict and dfs(s[i + 1 :]):
+                    return True
+            return False
+        return dfs(s)
+```
+
 ### [300. 最长递增子序列 (Longest Increasing Subsequence)](https://leetcode.cn/problems/longest-increasing-subsequence/description)
+
+```python
+class Solution:
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        @cache
+        def dfs(i):
+            res = 1
+            for j in range(i):
+                if nums[j] < nums[i]:
+                    res = max(res, dfs(j) + 1)
+            return res
+        return max(dfs(i) for i in range(len(nums)))
+```
+
 ### [152. 乘积最大子数组 (Maximum Product Subarray)](https://leetcode.cn/problems/maximum-product-subarray/description)
+
+```python
+class Solution:
+    def maxProduct(self, nums: List[int]) -> int:
+        res = curmax = curmin = nums[0]
+        for num in nums[1:]:
+            things = (num, num * curmax, num * curmin)
+            curmax, curmin = max(things), min(things)
+            res = max(res, curmax)
+        return res
+```
+
 ### [416. 分割等和子集 (Partition Equal Subset Sum)](https://leetcode.cn/problems/partition-equal-subset-sum/description)
+
+```python
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        @cache
+        def dfs(i, j):
+            if i < 0:
+                return j == 0
+            if j < nums[i]:
+                return dfs(i - 1, j)
+            return dfs(i - 1, j) or dfs(i - 1, j - nums[i])
+        s = sum(nums)
+        return s % 2 == 0 and dfs(len(nums) - 1, s // 2)
+```
+
 ### [32. 最长有效括号 (Longest Valid Parentheses)](https://leetcode.cn/problems/longest-valid-parentheses/description)
+
+```python
+class Solution:
+    def longestValidParentheses(self, s: str) -> int:
+        st = []
+        for i in range(len(s)):
+            if st and s[i] == ')' and s[st[-1]] == '(':
+                st.pop()
+            else:
+                st.append(i)
+        st = [-1] + st + [len(s)]
+        res = 0
+        for x, y in pairwise(st):
+            res = max(res, y - x - 1)
+        return res
+```
+
 ## 多维动态规划
 ### [62. 不同路径 (Unique Paths)](https://leetcode.cn/problems/unique-paths/description)
 ### [64. 最小路径和 (Minimum Path Sum)](https://leetcode.cn/problems/minimum-path-sum/description)
