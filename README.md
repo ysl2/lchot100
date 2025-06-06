@@ -1438,12 +1438,136 @@ class Solution:
 ```
 
 ## 二分查找
+
 ### [35. 搜索插入位置 (Search Insert Position)](https://leetcode.cn/problems/search-insert-position/description)
+
+```python
+class Solution:
+    def searchInsert(self, nums: List[int], target: int) -> int:
+        left, right = 0, len(nums) - 1
+        while left <= right:
+            mid = left + (right - left) // 2
+            if nums[mid] >= target:
+                right = mid - 1
+            else:
+                left = mid + 1
+        return left
+```
+
 ### [74. 搜索二维矩阵 (Search a 2D Matrix)](https://leetcode.cn/problems/search-a-2d-matrix/description)
+
+```python
+class Solution:
+    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+        i, j = 0, len(matrix[0]) - 1
+        while i <= len(matrix) - 1 and j >= 0:
+            if matrix[i][j] == target:
+                return True
+            elif matrix[i][j] > target:
+                j -= 1
+            elif matrix[i][j] < target:
+                i += 1
+        return False
+```
+
 ### [34. 在排序数组中查找元素的第一个和最后一个位置 (Find First and Last Position of Element in Sorted Array)](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/description)
+
+```python
+class Solution:
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+        def search(nums, target):
+            left, right = 0, len(nums) - 1
+            while left <= right:
+                mid = left + (right - left) // 2
+                if nums[mid] >= target:
+                    right = mid - 1
+                else:
+                    left = mid + 1
+            return left
+
+        start = search(nums, target)
+        if start > len(nums) - 1 or nums[start] != target:
+            return [-1, -1]
+        end = search(nums, target + 1) - 1
+        return [start, end]
+```
+
 ### [33. 搜索旋转排序数组 (Search in Rotated Sorted Array)](https://leetcode.cn/problems/search-in-rotated-sorted-array/description)
+
+```python
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        def find_min(nums):
+            left, right = 0, len(nums) - 2
+            while left <= right:
+                mid = left + (right - left) // 2
+                if nums[mid] < nums[-1]:
+                    right = mid - 1
+                else:
+                    left = mid + 1
+            return left
+
+        def _search(nums, left, right):
+            while left <= right:
+                mid = left + (right - left) // 2
+                if nums[mid] >= target:
+                    right = mid - 1
+                else:
+                    left = mid + 1
+            if left <= len(nums) - 1 and nums[left] == target:
+                return left
+            else:
+                return -1
+
+        i = find_min(nums)
+        if target <= nums[-1]:
+            left, right = i, len(nums) - 1
+        else:
+            left, right = 0, i
+        return _search(nums, left, right)
+```
+
 ### [153. 寻找旋转排序数组中的最小值 (Find Minimum in Rotated Sorted Array)](https://leetcode.cn/problems/find-minimum-in-rotated-sorted-array/description)
+
+```python
+class Solution:
+    def findMin(self, nums: List[int]) -> int:
+        left, right = 0, len(nums) - 2
+        while left <= right:
+            mid = left + (right - left) // 2
+            if nums[mid] < nums[-1]:
+                right = mid - 1
+            else:
+                left = mid + 1
+        return nums[left]
+```
+
 ### [4. 寻找两个正序数组的中位数 (Median of Two Sorted Arrays)](https://leetcode.cn/problems/median-of-two-sorted-arrays/description)
+
+```python
+class Solution:
+    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+        if len(nums1) > len(nums2):
+            nums1, nums2 = nums2, nums1
+        m, n = len(nums1), len(nums2)
+        for i in range(m + 1):
+            j = (m + n + 1) // 2 - i
+            left1_max = -inf if i == 0 else nums1[i - 1]
+            left2_max = -inf if j == 0 else nums2[j - 1]
+            left_max = max(left1_max, left2_max)
+
+            right1_min = inf if i == m else nums1[i]
+            right2_min = inf if j == n else nums2[j]
+            right_min = min(right1_min, right2_min)
+
+            if left_max <= right_min:
+                if (m + n) % 2 == 0:
+                    return (left_max + right_min) / 2
+                else:
+                    return left_max
+        return 0
+```
+
 ## 栈
 ### [20. 有效的括号 (Valid Parentheses)](https://leetcode.cn/problems/valid-parentheses/description)
 ### [155. 最小栈 (Min Stack)](https://leetcode.cn/problems/min-stack/description)
