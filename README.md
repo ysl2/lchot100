@@ -1257,14 +1257,186 @@ class Trie(dict):
 ```
 
 ## 回溯
+
 ### [46. 全排列 (Permutations)](https://leetcode.cn/problems/permutations/description)
+
+```python
+class Solution:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        def dfs(nums, tmp):
+            if not nums:
+                res.append(tmp)
+                return
+            for i in range(len(nums)):
+                dfs(nums[:i] + nums[i + 1:], tmp + [nums[i]])
+        dfs(nums, [])
+        return res
+```
+
 ### [78. 子集 (Subsets)](https://leetcode.cn/problems/subsets/description)
+
+```python
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        def dfs(nums, tmp):
+            res.append(tmp)
+            if not nums:
+                return
+            for i in range(len(nums)):
+                dfs(nums[i + 1:], tmp + [nums[i]])
+        dfs(nums, [])
+        return res
+```
+
 ### [17. 电话号码的字母组合 (Letter Combinations of a Phone Number)](https://leetcode.cn/problems/letter-combinations-of-a-phone-number/description)
+
+```python
+class Solution:
+    def letterCombinations(self, digits: str) -> List[str]:
+        if not digits:
+            return []
+
+        mp = {
+            '2': ['a', 'b', 'c'],
+            '3': ['d', 'e', 'f'],
+            '4': ['g', 'h', 'i'],
+            '5': ['j', 'k', 'l'],
+            '6': ['m', 'n', 'o'],
+            '7': ['p', 'q', 'r', 's'],
+            '8': ['t', 'u', 'v'],
+            '9': ['w', 'x', 'y', 'z']
+        }
+
+        res = []
+
+        def dfs(nums, tmp):
+            if not nums:
+                res.append(tmp)
+                return
+            for c in mp[nums[0]]:
+                dfs(nums[1:], tmp + c)
+
+        dfs(digits, '')
+        return res
+```
+
 ### [39. 组合总和 (Combination Sum)](https://leetcode.cn/problems/combination-sum/description)
+
+```python
+class Solution:
+    def combinationSum(self, nums: List[int], target: int) -> List[List[int]]:
+        nums.sort()
+        res = []
+        def dfs(nums, tmp):
+            if sum(tmp) == target:
+                res.append(tmp)
+                return
+            for i in range(len(nums)):
+                if nums[i] > target - sum(tmp):
+                    break
+                dfs(nums[i:], tmp + [nums[i]])
+        dfs(nums, [])
+        return res
+```
+
 ### [22. 括号生成 (Generate Parentheses)](https://leetcode.cn/problems/generate-parentheses/description)
+
+```python
+class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+        res = []
+        def dfs(remain_open, remain_close, tmp):
+            if remain_open == 0 and remain_close == 0:
+                res.append(tmp)
+                return
+            if remain_open > 0:
+                dfs(remain_open - 1, remain_close + 1, tmp + '(')
+            if remain_close > 0:
+                dfs(remain_open, remain_close - 1, tmp + ')')
+        dfs(n, 0, "")
+        return res
+```
+
 ### [79. 单词搜索 (Word Search)](https://leetcode.cn/problems/word-search/description)
+
+```python
+class Solution:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        def dfs(i, j, index):
+            if index == len(word):
+                return True
+            if not (
+                0 <= i <= len(board) - 1
+                and 0 <= j <= len(board[0]) - 1
+            ):
+                return False
+            if board[i][j] != word[index]:
+                return False
+            tmp = board[i][j]
+            board[i][j] = '#'
+            flag = (
+                dfs(i - 1, j, index + 1)
+                or dfs(i + 1, j, index + 1)
+                or dfs(i, j - 1, index + 1)
+                or dfs(i, j + 1, index + 1)
+            )
+            board[i][j] = tmp
+            return flag
+
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                if dfs(i, j, 0):
+                    return True
+        return False
+```
+
 ### [131. 分割回文串 (Palindrome Partitioning)](https://leetcode.cn/problems/palindrome-partitioning/description)
+
+```python
+class Solution:
+    def partition(self, s: str) -> List[List[str]]:
+        res = []
+        def dfs(s, tmp):
+            if not s:
+                res.append(tmp)
+                return
+            for i in range(1, len(s) + 1):
+                if s[:i] == s[:i][::-1]:
+                    dfs(s[i:], tmp + [s[:i]])
+        dfs(s, [])
+        return res
+```
+
 ### [51. N 皇后 (N-Queens)](https://leetcode.cn/problems/n-queens/description)
+
+```python
+class Solution:
+    def solveNQueens(self, n: int) -> List[List[str]]:
+        res = []
+        s = '.' * n
+        def dfs(row, cols, poss, negs, tmp):
+            if row == n:
+                res.append(tmp)
+                return
+            for col in range(n):
+                if (
+                    col not in cols
+                    and row + col not in poss
+                    and row - col not in negs
+                ):
+                    dfs(
+                        row + 1,
+                        cols | {col},
+                        poss | {row + col},
+                        negs | {row - col},
+                        tmp + [s[:col] + 'Q' + s[col + 1:]]
+                    )
+        dfs(0, set(), set(), set(), [])
+        return res
+```
+
 ## 二分查找
 ### [35. 搜索插入位置 (Search Insert Position)](https://leetcode.cn/problems/search-insert-position/description)
 ### [74. 搜索二维矩阵 (Search a 2D Matrix)](https://leetcode.cn/problems/search-a-2d-matrix/description)
