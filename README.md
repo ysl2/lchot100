@@ -1403,8 +1403,9 @@ class Solution:
                 res.append(tmp)
                 return
             for i in range(1, len(s) + 1):
-                if s[:i] == s[:i][::-1]:
-                    dfs(s[i:], tmp + [s[:i]])
+                t = s[:i]
+                if t == t[::-1]:
+                    dfs(s[i:], tmp + [t])
         dfs(s, [])
         return res
 ```
